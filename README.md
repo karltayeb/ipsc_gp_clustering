@@ -38,4 +38,4 @@ Input X, Y, weight_idx as above. We use gpflow's multioutput kernels to specify 
 
 4. If data is only observed at a small number of input locations, and you are using a model with gaussian noise, we can speed up the computations for estimating the mean/variance by doing inference on a GP with the average observations as input. We can initialize a second model that we will feed a weighted average of our observations under the current assignment.
 
-Learning proceeds as follows. We iterativelt use the first model to estimate kernel parameters, and the mean-model to estimate trajectories.
+Learning proceeds as follows. We iteravely use the first model to estimate kernel parameters, and the mean-model to estimate trajectories.
