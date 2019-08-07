@@ -67,7 +67,7 @@ def run_gsea(scores, n, gene_set_path='../gsea/data/h.all.v5.1.symbols.gmt.txt')
                      'group 1': largest, 'group 2': smallest})
 
 
-def gen_gsea_df(assignments, pickle_path=None,
+def gen_gsea_df_old(assignments, pickle_path=None,
                 gene_set_path='../gsea/data/h.all.v5.1.symbols.gmt.txt',
                 threshold=1e-2, rerun=False):
     N, K = assignments.Phi.shape
@@ -104,6 +104,28 @@ def gen_gsea_df(assignments, pickle_path=None,
         {l: pd.DataFrame(gsea(
             gene_names2[gene_assignments == l],
             gene_names2, gene_set_path), index=index) for l in range(L)})
+    results.to_pickle(pickle_path)
+    return results
+
+def gen_gsea_df(gene_assignments, gene_names, pickle_path=None,
+                gene_set_path='../gsea/data/h.all.v5.1.symbols.gmt.txt',
+                threshold=1e-2, rerun=False):
+
+    if not rerun:
+        try:
+            results = pd.read_pickle(pickle_path)
+            return results
+        except:
+            pass
+
+    L = np.unique(gene_assignments).size
+    index = ['test_inset', 'test_not_inset', 'background_inset',
+             'background_not_inset', 'oddsratio', 'pvalue',
+             'bonferonni-adjusted', 'genes']
+    results = pd.concat(
+        {l: pd.DataFrame(gsea(
+            gene_names[gene_assignments == l],
+            gene_names, gene_set_path), index=index) for l in range(L)})
     results.to_pickle(pickle_path)
     return results
 
